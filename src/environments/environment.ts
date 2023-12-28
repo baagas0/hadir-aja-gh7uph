@@ -3,7 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiKeyMaps: 'AIzaSyD3EfVyY-k6D_tsSasbMtEqqHjgArFNc00',
+  // baseUrl: 'http://192.168.88.75:8000/api',
+  // baseUrl: 'https://spp.demo-web.my.id/api',
+  baseUrl: 'http://127.0.0.1:8000/api',
 };
 
 /*

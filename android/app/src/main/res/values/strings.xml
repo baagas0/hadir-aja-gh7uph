@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Hadir Aja</string>
+    <string name="title_activity_main">Hadir Aja</string>
+    <string name="package_name">com.hadir.aja</string>
+    <string name="custom_url_scheme">com.hadir.aja</string>
+</resources>

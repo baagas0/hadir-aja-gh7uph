@@ -1,0 +1,35 @@
+ion-modal {
+    --ion-background-color: #ffffff !important;
+    --ion-background: #ffffff !important;
+    --background: #ffffff !important;
+  }
+  
+  ion-loading.custom-loading {
+    --background: #e3edff;
+    --spinner-color: #1c6dff;
+  
+    color: #1c6dff;
+  }
+  
+  .home-top {
+    // background-color: rgba(171, 207, 210, 0.5);
+    background-image: url('/assets/img/background.jpg');
+    background-size: contain;
+    height: 25% !important;
+  }
+  
+  .logo {
+    height: 35px;
+    width: 35px;
+    background-color: #E2EAF7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  
+    border-radius: 35px;
+  }
+  
+  .logo img {
+    height: 18px;
+    height: 18px;
+  }

@@ -1,0 +1,27 @@
+.cover-splash-login {
+  background-image: url('/assets/img/bg-login.png');
+  // background-size: contain;
+}
+
+.cover-login {
+  background-image: url('/assets/img/bg-login-4.png');
+  background-size: contain;
+}
+
+ion-input {
+  border-radius: 10px !important;
+  padding-right: 30px;
+  font-size: 0.9em;
+  --background: #f3f6f9 !important;
+  height: 60px;
+  /* width: 41%; */
+  max-width: 100%; // this is applying perfectly
+  // max-height: 10vh;
+  background-color: #093634;
+}
+
+.button-transparent {
+  --background: transparentize(100);
+  --background-hover: #ffffff;
+  --box-shadow: none;
+}

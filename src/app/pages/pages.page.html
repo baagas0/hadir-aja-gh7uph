@@ -1,0 +1,43 @@
+<ion-tabs (ionTabsWillChange)="onTabsWillChange($event)">
+  <ion-tab-bar slot="bottom" id="ion-tab-bar">
+    <ion-tab-button tab="dashboard">
+      <img
+        src="/assets/export-figma/TabsMenu/Icon/dashboard{{ tabActive == 'dashboard' ? '' : '-inactive' }}.png"
+        alt=""
+      />
+      <ion-label class="text-w-500">Beranda</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="sales">
+      <img
+        src="/assets/export-figma/TabsMenu/Icon/sales{{ tabActive == 'sales' ? '' : '-inactive' }}.png"
+        alt=""
+      />
+      <ion-label class="text-w-500">Sales</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="production">
+      <img
+        src="/assets/export-figma/TabsMenu/Icon/produksi{{ tabActive == 'production' ? '' : '-inactive' }}.png"
+        alt=""
+      />
+      <ion-label class="text-w-500">Produksi</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="stock">
+      <img
+        src="/assets/export-figma/TabsMenu/Icon/inventory{{ tabActive == 'stock' ? '' : '-inactive' }}.png"
+        alt=""
+      />
+      <ion-label class="text-w-500">Stock</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="statistik">
+      <img
+        src="/assets/export-figma/TabsMenu/Icon/maintenance{{ tabActive == 'statistik' ? '' : '-inactive' }}.png"
+        alt=""
+      />
+      <ion-label class="text-w-500">Statistik</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>
