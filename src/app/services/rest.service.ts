@@ -3,6 +3,9 @@ import { Observable, of } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { StorageService } from './storage.service';
+import { Router } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+import { Toast } from '@capacitor/toast';
 // export class any {
 //   id: string;
 //   username: string;
@@ -13,25 +16,48 @@ import { StorageService } from './storage.service';
   providedIn: 'root',
 })
 export class RestService {
-  URL: string = 'https://jsonplaceholder.typicode.com/users';
+  // URL: string = 'http://hadir-aja.test/api';
+  // URL: string = 'http://192.168.100.150:8000/api'
+  URL: string = 'https://af3b-93-174-93-20.ngrok-free.app/api'
   token: any = localStorage.getItem('token');
 
   httpHeader = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    Authorization: `Bearer ${this.token}`
+    headers: {}
   };
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    public storage: StorageService,
+    public router: Router,
+    private toastController: ToastController,
+  ) {
+    this.initHeader()
+  }
+
+  initHeader() {
+    console.log('init header', this.token)
+    this.httpHeader.headers = new HttpHeaders({ 
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.token}`
+    })
+  }
 
   get(uri: any, param: any): Observable<any[]> {
-    return this.http.get<any[]>(`${this.URL}/` + uri, { params: param }).pipe(
+    const headers = {
+      'Authorization': `Bearer `+localStorage.getItem('token')
+    }
+    
+    return this.http.get<any[]>(`${this.URL}/` + uri, { headers: headers }).pipe(
       tap((_) => console.log(`any fetched: ${uri}`)),
       catchError(this.handleError<any[]>(`Get student uri=${uri}`))
     );
   }
   post(uri: any, body: any, params: any): Observable<any> {
-    // console.log('anjing', this.URL)
-    return this.http.post(`${this.URL}/${uri}`, body, { ...this.httpHeader, ...params }).pipe(
+    const headers = {
+      'Authorization': `Bearer `+localStorage.getItem('token')
+    }
+
+    return this.http.post(`${this.URL}/${uri}`, body, { ...{ headers: headers }, ...params }).pipe(
       tap((_) => console.log(`any post`)),
       catchError(this.handleError<any[]>('Update student'))
     );
@@ -62,8 +88,34 @@ export class RestService {
   }
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
-      console.error(error);
-      console.log(`${operation} failed: ${error.message}`);
+      console.log('jancok1')
+      if (error.status == 401) {
+        console.log('jancok')
+        localStorage.setItem('token', '');
+        this.router.navigateByUrl('/auth/login');
+      }
+
+      // (async () => {
+      //   console.log('toas')
+      //   const toast = await this.toastController.create({
+      //     header: 'Pemberitahuan',
+      //     message: error.error.message,
+      //     duration: 1500,
+      //     position: 'top',
+      //     icon: 'alert-circle-outline',
+      //     swipeGesture: 'vertical',
+      //   });
+    
+      //   await toast.present();
+      // })
+
+      alert(error.error.message)
+
+
+      console.error(error.error.message)
+      // console.error(JSON.stringify(error))
+      console.error(error.status);
+      console.error(`${operation} failed: ${error.message}`);
       return of(result as T);
     };
   }

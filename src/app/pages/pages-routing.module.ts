@@ -12,6 +12,16 @@ const routes: Routes = [
         loadChildren: () =>
           import('./home/home.module').then((m) => m.HomePageModule),
       },
+      {
+        path: 'presence-history',
+        loadChildren: () =>
+          import('./presence-history/presence-history.module').then((m) => m.PresenceHistoryPageModule),
+      },
+      {
+        path: 'take',
+        loadChildren: () =>
+          import('./take/take.module').then((m) => m.TakePageModule),
+      },
       
       {
         path: '',

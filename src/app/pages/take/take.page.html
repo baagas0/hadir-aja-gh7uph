@@ -1,0 +1,8 @@
+<ion-content [fullscreen]="true">
+    <ion-button [color]="tracking ? 'danger' : 'primary'">
+        <ion-label class="ion-padding" (click)="toggleTracking()">Start Tracking</ion-label>
+        <ion-icon [name]="tracking ? 'close' : 'finger-print'"></ion-icon>
+    </ion-button>
+    <video class="user-media" id="user-video" autoplay playsinline></video>
+    <canvas class="user-media" id="user-canvas" ></canvas>
+</ion-content>

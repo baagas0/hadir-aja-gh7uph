@@ -14,11 +14,13 @@ export class AuthService {
     // public restService: RestService
     public storage: StorageService,
     public navCtrl: NavController
-  ) {}
+  ) {
+    
+  }
 
   async check() {
-    // const token = localStorage.getItem('token');
-    const token = await this.storage.get('token');
+    const token = localStorage.getItem('token');
+    // const token = await this.storage.get('token');
     console.log(token);
     if (token) {
       return true;
@@ -29,16 +31,15 @@ export class AuthService {
 
   async setAuth(data: any) {
     /** Save ke storage */
-    let unpaid_bill = data.user.unpaid_bill;
-    let map = data.user.map;
+    // let unpaid_bill = data.user.unpaid_bill;
+    // let map = data.user.map;
     let user = data.user;
 
     console.log('data');
 
-    await this.storage.set('token', data.token);
+    await this.storage.set('token', data.authorization.token);
+    localStorage.setItem('token', data.authorization.token)
     await this.storage.set('user', user);
-    await this.storage.set('unpaid_bill', unpaid_bill);
-    await this.storage.set('map', map);
   }
 
   async logout() {

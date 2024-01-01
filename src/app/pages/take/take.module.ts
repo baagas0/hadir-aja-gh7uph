@@ -3,16 +3,17 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { HomePageRoutingModule } from './home-routing.module';
+import { TakePageRoutingModule } from './take-routing.module';
 
-import { HomePage } from './home.page';
+import { TakePage } from './take.page';
+
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    HomePageRoutingModule,
+    TakePageRoutingModule
   ],
-  declarations: [HomePage]
+  declarations: [TakePage]
 })
-export class HomePageModule {}
+export class TakePageModule {}

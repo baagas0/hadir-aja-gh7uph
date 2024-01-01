@@ -25,6 +25,7 @@ export class LoginPage implements OnInit {
 
     private rest: RestService,
     public auth: AuthService,
+    public storage: StorageService,
     public router: Router,
   ) {}
 
@@ -32,15 +33,15 @@ export class LoginPage implements OnInit {
     this.loginForm = new FormGroup({
       // nisn: new FormControl('11800659'),
       // password: new FormControl('123456'),
-      nisn: new FormControl(''),
+      student_number: new FormControl(''),
       password: new FormControl(''),
       // mobile: new FormControl(true),
-      token: new FormControl(),
+      device_id: new FormControl(),
     });
 
     let checkLogin = await this.auth.check();
     if (checkLogin) {
-      this.router.navigateByUrl('/pages/dashboard');
+      this.router.navigateByUrl('/pages/home');
       // this.navCtrl.navigateRoot('/pages/dashboard');
     }
   }
@@ -53,42 +54,22 @@ export class LoginPage implements OnInit {
 
     loading.present();
 
-    this.loginForm.value.token = '12983h1203812391283y1982hibkjb1iugy12g21';
+    this.loginForm.value.device_id = '12983h1203812391283y1982hibkjb1iugy12g21';
 
-    this.rest.post('login', this.loginForm.value, {}).subscribe(
-      /** API Berhasil => 200 ok */
-      async (data) => {
-        console.log(data);
+    this.rest.post('login', this.loginForm.value, {})
+    .subscribe(async (data) => {
+      console.log('data', data);
 
-        await this.auth.setAuth(data);
-        loading.dismiss();
-        this.router.navigateByUrl('/pages/dashboard');
-        // this.navCtrl.navigateRoot('/pages/dashboard');
-      },
-
-      /** API Gagal => 500 */
-      async (e) => {
-        loading.dismiss();
-        console.log('e');
-        console.log(e);
-        e.subscribe((err: any) => {
-          console.log(err)
-        })
-        // alert(e);
-      }
-    );
+      await this.auth.setAuth(data);
+      loading.dismiss();
+      // this.goAnOtherPage('/pages/home');
+      this.router.navigateByUrl('/pages/home');
+    });
   }
 
-  async goAnOtherPage() {
-    const loading = await this.loadingCtrl.create({
-      cssClass: 'custom-loading',
-      message: 'Dismissing after 3 seconds...',
-      duration: 3000,
-    });
-
-    loading.present();
+  async goAnOtherPage(page: string) {
     
-    this.navCtrl.navigateForward('take-picture');
+    this.navCtrl.navigateForward(page);
   }
 
   async showLoading() {

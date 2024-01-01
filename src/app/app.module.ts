@@ -39,7 +39,7 @@ import { Drivers } from '@ionic/storage';
     IonicStorageModule.forRoot({
       name: '__mydb',
       driverOrder: [Drivers.IndexedDB, Drivers.LocalStorage],
-    })
+    }),
   ],
   providers: [
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
