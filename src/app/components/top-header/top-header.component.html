@@ -1,0 +1,59 @@
+<ion-card class="card-header" *ngIf="type == 'toolbar-search'">
+  <ion-card-content>
+    <div class="d-flex flex-row justify-content-between align-items-center">
+      <h5 class="text-white">{{ title }}</h5>
+      <div class="text-white">
+        <ion-icon name="filter" color="white" class="mx-3"></ion-icon>
+        <ion-icon name="search" color="white"></ion-icon>
+      </div>
+    </div>
+  </ion-card-content>
+</ion-card>
+
+<ion-header *ngIf="type == 'toolbar-blue'">
+  <ion-toolbar class="card-header" style="--background: #1f4f94 !important">
+    <div>
+      <ion-card-content>
+        <div class="d-flex flex-row justify-content-start align-items-center">
+          <!-- <ion-icon
+            name="return-up-back-outline"
+            class="text-white"
+            style="font-size: 24px; margin-right: 1rem"
+            (click)="this.navCtrl.back()"
+          ></ion-icon> -->
+          <ion-back-button class="custom-back-button" [defaultHref]="withBackButton" *ngIf="withBackButton" icon="return-up-back-outline">
+          </ion-back-button>
+          
+          <h5 class="text-white text-w-600">{{ title }}</h5>
+          <div class="text-black" hidden>
+            <ion-icon name="filter" color="white" class="mx-3"></ion-icon>
+            <ion-icon name="search" color="white"></ion-icon>
+          </div>
+        </div>
+      </ion-card-content>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-header *ngIf="type == 'toolbar-white'">
+  <ion-toolbar class="card-header bg-white">
+    <div>
+      <ion-card-content>
+        <div class="d-flex flex-row justify-content-start align-items-center">
+          <ion-icon
+            *ngIf="withBackButton"
+            name="close-outline"
+            class="text-black"
+            style="font-size: 24px; margin-right: 1rem"
+            (click)="this.navCtrl.back()"
+          ></ion-icon>
+          <h5 class="text-black text-w-600">{{ title }}</h5>
+          <div class="text-black" hidden>
+            <ion-icon name="filter" color="white" class="mx-3"></ion-icon>
+            <ion-icon name="search" color="white"></ion-icon>
+          </div>
+        </div>
+      </ion-card-content>
+    </div>
+  </ion-toolbar>
+</ion-header>

@@ -1,0 +1,50 @@
+<div>
+  <p
+    *ngIf="type == 'picker'"
+    [id]="modalID"
+    expand="block"
+    class="text-center p-1 px-3 mt-3 d-flex align-items-center picker"
+  >
+    <span style="vertical-align: middle">{{ valDate.from | date : "shortDate" }} - {{ valDate.to | date : "shortDate" }}</span>
+    <ion-icon class="ml-3" color="primary" name="chevron-down"></ion-icon>
+  </p>
+
+  <ion-input
+    [id]="modalID"
+    class="form-input"
+    placeholder="Pilih tanggal"
+    *ngIf="type == 'input' && mode == 'range'"
+    [value]="((valDate?.from | date : 'shortDate') + ' - ' + (valDate?.to | date : 'shortDate'))"
+  ></ion-input>
+
+  <ion-input
+    [id]="modalID"
+    class="form-input"
+    placeholder="Pilih tanggal"
+    *ngIf="type == 'input' && mode == 'single'"
+    [value]="(valDate | date: 'longDate')"
+  ></ion-input>
+
+  <ion-modal
+    [trigger]="modalID"
+    [initialBreakpoint]="0.5"
+    [breakpoints]="[0, 0.25, 0.5, 0.75]"
+    handleBehavior="cycle"
+  >
+    <ng-template>
+      <ion-content class="ion-padding">
+        <div class="ion-margin-top">
+          <ion-calendar
+            class="p-0"
+            [(ngModel)]="valDate"
+            (change)="dateChange($event)"
+            [options]="valDateOptions"
+            [type]="'string'"
+            [format]="'YYYY-MM-DD'"
+          >
+          </ion-calendar>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</div>

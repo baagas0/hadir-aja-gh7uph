@@ -1,3 +1,118 @@
+<ion-router-outlet></ion-router-outlet>
+<ion-header>
+  <ion-toolbar class="card-header bg-white">
+    <div>
+      <ion-card-content>
+        <div class="d-flex flex-row justify-content-start align-items-center">
+          <ion-icon
+            name="close-outline"
+            class="text-black"
+            style="font-size: 24px; margin-right: 1rem"
+            (click)="this.navCtrl.back()"
+          ></ion-icon>
+          <h5 class="text-black text-w-600">Riwayat Aktivitas</h5>
+          <div class="text-black" hidden>
+            <ion-icon name="filter" color="white" class="mx-3"></ion-icon>
+            <ion-icon name="search" color="white"></ion-icon>
+          </div>
+        </div>
+      </ion-card-content>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
 <ion-content [fullscreen]="true">
-    <ion-datetime presentation="month-year"></ion-datetime>
+  <div class="ion-padding">
+    <!-- REFRESH -->
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <!-- FILTER -->
+    <div id="modal-filter" class="w-100 p-3 d-flex justify-content-between mb-3" style="border: 1px solid #c4c4c4; border-radius: 8px;">
+
+      <div class="d-flex gap-10">
+        <ion-icon name="calendar-outline" style="font-size: 18px;"></ion-icon>
+        <h5 class="mb-0 mt-0" style="height: 18px; font-size: 15px;">{{ month_year_text }}</h5>
+      </div>
+
+      <ion-icon name="chevron-down-outline"></ion-icon>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="d-flex justify-content-center align-items-center">
+      <div class="spinner-border text-primary" *ngIf="loaderGetHistory" role="status" style="width: 20px;height: 20px;border: 1 solid currentcolor;">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="presence_history.length === 0 && loaderGetHistory === false">
+      <div class="card-body">
+        <div class="d-flex flex-column align-items-center justify-content-center">
+          <img src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/misc/upgrade.svg" alt="" style="width: 30%;" srcset="">
+          <h3 class="font-weight-bolder">Belum ada aktivitas</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column" *ngIf="presence_history.length > 0 && loaderGetHistory === false">
+
+      <div class="card mb-3" style="border: 0px solid; border-radius: 10px;" *ngFor="let item of presence_history">
+        <div class="card-body" style="border-radius: 10px; box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;">
+          <div class="d-flex gap-10">
+
+            <div *ngIf="item?.type === 'in'" style="width: 40px; height: 40px; background-color: #F1FAFF; border-radius: 10px;display: flex; justify-content: center; align-items: center;">
+              <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr096.svg-->
+              <span class="svg-icon svg-icon-muted svg-icon-2hx text-primary" style="">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect opacity="0.3" width="12" height="2" rx="1" transform="matrix(-1 0 0 1 20 11)" fill="currentColor"/>
+                  <path d="M18.1313 11.6927L16.3756 10.2297C15.9054 9.83785 15.8732 9.12683 16.306 8.69401C16.6957 8.3043 17.3216 8.28591 17.7336 8.65206L20.6592 11.2526C21.1067 11.6504 21.1067 12.3496 20.6592 12.7474L17.7336 15.3479C17.3216 15.7141 16.6957 15.6957 16.306 15.306C15.8732 14.8732 15.9054 14.1621 16.3756 13.7703L18.1313 12.3073C18.3232 12.1474 18.3232 11.8526 18.1313 11.6927Z" fill="currentColor"/>
+                  <path opacity="0.5" d="M16 5V6C16 6.55228 15.5523 7 15 7C14.4477 7 14 6.55228 14 6C14 5.44772 13.5523 5 13 5H6C5.44771 5 5 5.44772 5 6V18C5 18.5523 5.44771 19 6 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 14.4477 17 15 17C15.5523 17 16 17.4477 16 18V19C16 20.1046 15.1046 21 14 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14C15.1046 3 16 3.89543 16 5Z" fill="currentColor"/>
+                </svg>
+              </span>
+                <!--end::Svg Icon-->
+            </div>
+
+            <div *ngIf="item?.type === 'out'" style="width: 40px; height: 40px; background-color: #FFF4DE; border-radius: 10px;display: flex; justify-content: center; align-items: center;">
+              <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr096.svg-->
+              <span class="svg-icon svg-icon-muted svg-icon-2hx text-warning" style="">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect opacity="0.3" x="8.5" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+                  <path d="M10.3687 11.6927L12.1244 10.2297C12.5946 9.83785 12.6268 9.12683 12.194 8.69401C11.8043 8.3043 11.1784 8.28591 10.7664 8.65206L7.84084 11.2526C7.39332 11.6504 7.39332 12.3496 7.84084 12.7474L10.7664 15.3479C11.1784 15.7141 11.8043 15.6957 12.194 15.306C12.6268 14.8732 12.5946 14.1621 12.1244 13.7703L10.3687 12.3073C10.1768 12.1474 10.1768 11.8526 10.3687 11.6927Z" fill="currentColor"/>
+                  <path opacity="0.5" d="M16 5V6C16 6.55228 15.5523 7 15 7C14.4477 7 14 6.55228 14 6C14 5.44772 13.5523 5 13 5H6C5.44771 5 5 5.44772 5 6V18C5 18.5523 5.44771 19 6 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 14.4477 17 15 17C15.5523 17 16 17.4477 16 18V19C16 20.1046 15.1046 21 14 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14C15.1046 3 16 3.89543 16 5Z" fill="currentColor"/>
+                </svg>
+              </span>
+                <!--end::Svg Icon-->
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <div class="d-flex flex-column justify-content-center">
+                <h5 class="mt-0 mb-0" style="font-size: 13px; font-weight: 500;">Absen {{ item.ref_table === 'presence_barcode_school_users' ? 'Kelas | ' : 'Harian |' }} {{ item?.type === 'in' ? 'Masuk' : (item?.type === 'out' ? 'Keluar' : '-') }}</h5>
+                <p class="text-dark mt-0 mb-0" style="font-size: 11px;">{{ rMoment(item?.datetime, 'YYYY-MM-DD').locale('id').format('D MMM Y') }}</p>
+              </div>
+
+              <h5 class="mt-0 mb-0" style="font-size: 14px; font-weight: 600;">{{ rMoment(item?.presence?.hour, 'H:mm').locale('id').format('H:mm') }} WIB</h5>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <ion-modal #modal trigger="modal-filter" [initialBreakpoint]="0.4" [breakpoints]="[0, 0.4, 0.5, 0.75]">
+    <ng-template>
+      <ion-content class="ion-padding">
+        <form action="" class="mt-3" [formGroup]="historyForm">
+          <ion-datetime class="mb-2" presentation="month-year" size="cover" yearValues="2020,2021,2022,2023,2024" formControlName="month_year" style="border: 1px solid #c4c4c4; border-radius: 8px;"></ion-datetime>
+          <button  class="btn btn-outline-primary w-100" (click)="getPresenceHistory()">
+            <ion-icon name="filter-circle-outline"></ion-icon>
+            Terapkan Filter
+          </button>
+        </form>
+
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

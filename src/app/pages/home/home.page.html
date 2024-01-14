@@ -1,6 +1,6 @@
 
-<ion-content [fullscreen]="true">
-  <ion-refresher slot="fixed" (ionRefresh)="getPresence($event)">
+<ion-content [fullscreen]="true" style="background-color: #fff;">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
@@ -20,11 +20,11 @@
           </div>
           <div>
             <p class="mb-0 text-dark mb-0" style="font-size: 12px; font-weight: 500;">{{ user?.student_name }}</p>
-            <p class="mb-0 text-dark" style="font-size: 12px;">Mahasiswa</p>
+            <p class="mb-0 text-dark" style="font-size: 12px;">{{ user?.school_group?.group_name }}</p>
           </div>
         </div>
 
-        <div style="width: 30px; height: 30px; background-color: #FFE2E5; border-radius: 10px;display: flex; justify-content: center; align-items: center; color: red;">
+        <div style="width: 30px; height: 30px; background-color: #FFE2E5; border-radius: 10px;display: flex; justify-content: center; align-items: center; color: red;" (click)="logout()">
           <span class="svg-icon svg-icon-muted svg-icon-2hx text-warning" style="color: #F64E60 ;">
             <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Electric/Shutdown.svg-->
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -37,7 +37,7 @@
           </span>
         </div>
 
-        
+
 
       </div>
       <div class="d-flex flex-column justify-content-center align-items-center h-100">
@@ -46,23 +46,23 @@
       </div>
     </div>
   </div>
-  <div class="home-content" style="margin-top: -17px; min-height: 75%;">
-    <div class="card" style="border-radius: 17px; border-bottom: 0px; border-left: 0px; border-right: 0px; min-height: 75%;">
-      <div class="card-body">
+  <div class="home-content" style="margin-top: -17px; min-height: 100%; background-color: #fff; border-radius: 17px;">
+    <div class="card" style="border-radius: 17px; border-bottom: 0px; border-left: 0px; border-right: 0px; min-height: 100%;">
+      <div class="card-body" style="min-height: 100%;">
 
         <!-- WARNING -->
-        <div class="card mt-2" style="border-radius: 12px; background-color: #FFF8DD;" *ngIf="presenceStatus === 'not-ready'">
+        <div class="card mt-2" style="border-radius: 12px; background-color: #FFF8DD;" *ngIf="this.user?.selfie_img === null">
           <div class="card-body">
             <div class="d-flex flex-row align-items-start gap-10">
               <ion-icon name="alert-circle-outline"></ion-icon>
               <div>
                 <p class=" mt-0" style="font-size: 12px;">Update foto anda untuk melakukan presensi!</p>
-                <button class="btn btn-sm btn-primary">Update Foto</button>
+                <button class="btn btn-sm btn-primary" (click)="takeSelfie()">Update Foto</button>
               </div>
             </div>
           </div>
         </div>
-        
+
         <!-- Absen Status -->
         <div class="card mt-2" style="border-radius: 12px;" [style]="presenceStatus === 'not-ready' ? ' background-color: #d7d7d7;' : ''">
           <div class="card-body">
@@ -96,13 +96,13 @@
 
             <!-- Button Absen Kelas -->
             <div class="d-flex gap-10 mt-3" *ngIf="loaderGetPresence === false">
-              <button class="btn btn-light border btn-lg w-100 fs-10 text-primary" style="font-size: 12px; height: 50px; border-radius: 30px;" [disabled]="presenceStatus === 'not-ready'">
+              <button class="btn btn-light border btn-lg w-100 fs-10 text-primary" style="font-size: 12px; height: 50px; border-radius: 30px;" [disabled]="presenceStatus === 'not-ready'" (click)="handlePresenceKelasButton()">
                 Absen Kelas
               </button>
             </div>
           </div>
         </div>
-        
+
         <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
           <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">Aktivitas Anda</h5>
           <label for="" class="text-primary mt-0 mb-0" style="font-size: 11px;" (click)="goAnOtherPage('pages/presence-history')">Lihat semua</label>
@@ -113,7 +113,7 @@
             <span class="visually-hidden">Loading...</span>
           </div>
         </div>
-        
+
 
         <div class="card" *ngIf="presence_history.length === 0 && loaderGetHistory === false">
           <div class="card-body">
@@ -123,7 +123,7 @@
             </div>
           </div>
         </div>
-        
+
         <div class="d-flex flex-column" *ngIf="presence_history.length > 0 && loaderGetHistory === false">
 
           <div class="card mb-3" style="border: 0px solid; border-radius: 10px;" *ngFor="let item of presence_history">
@@ -153,14 +153,14 @@
                   </span>
                     <!--end::Svg Icon-->
                 </div>
-  
+
                 <div class="d-flex justify-content-between align-items-center w-100">
                   <div class="d-flex flex-column justify-content-center">
-                    <h5 class="mt-0 mb-0" style="font-size: 13px; font-weight: 500;">Absen {{ item?.type === 'in' ? 'Masuk' : (item?.type === 'out' ? 'Keluar' : '-') }}</h5>
+                    <h5 class="mt-0 mb-0" style="font-size: 13px; font-weight: 500;">Absen {{ item.ref_table === 'presence_barcode_school_users' ? 'Kelas | ' : 'Harian |' }} {{ item?.type === 'in' ? 'Masuk' : (item?.type === 'out' ? 'Keluar' : '-') }}</h5>
                     <p class="text-dark mt-0 mb-0" style="font-size: 11px;">{{ rMoment(item?.presence?.presence_date, 'YYYY-MM-DD').locale('id').format('D MMM Y') }}</p>
                   </div>
 
-                  <h5 class="mt-0 mb-0" style="font-size: 14px; font-weight: 600;">{{ rMoment(item?.presence?.hour, 'H:mm').locale('id').format('H:mm') }} WIB</h5>
+                  <h5 class="mt-0 mb-0" style="font-size: 14px; font-weight: 600;">{{ rMoment(item?.datetime, 'H:mm').locale('id').format('H:mm') }} WIB</h5>
                 </div>
 
               </div>
@@ -174,10 +174,10 @@
   <ion-modal #modal trigger="modal-absent-report" color="light" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.75]">
     <ng-template>
       <ion-content class="ion-padding" color="light">
-        
+
         <div class="d-flex align-items-center mt-3 mb-2 gap-10">
           <h5 class="mb-0 mt-0" style="font-size: 15px; font-weight: 500;">Riwayat hari ini</h5>
-          <span class="badge" style="background-color: #FFF8DD; font-size: 11px; color: #2d2d2d;   border: 1px solid #FFC107;">Hadir</span>
+          <span class="badge" style="background-color: #FFF8DD; font-size: 11px; color: #2d2d2d;   border: 1px solid #FFC107;">{{ presence?.status?.charAt(0).toUpperCase() + presence?.status?.slice(1) }}</span>
         </div>
 
         <div class="card">

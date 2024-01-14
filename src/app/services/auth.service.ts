@@ -15,7 +15,7 @@ export class AuthService {
     public storage: StorageService,
     public navCtrl: NavController
   ) {
-    
+
   }
 
   async check() {
@@ -45,8 +45,7 @@ export class AuthService {
   async logout() {
     await this.storage.remove('token');
     await this.storage.remove('user');
-    await this.storage.remove('unpaid_bill');
-    await this.storage.remove('map');
+    localStorage.removeItem('token')
 
     this.navCtrl.navigateRoot('/auth/login');
   }

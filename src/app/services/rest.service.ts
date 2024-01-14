@@ -18,7 +18,7 @@ import { Toast } from '@capacitor/toast';
 export class RestService {
   // URL: string = 'http://hadir-aja.test/api';
   // URL: string = 'http://192.168.100.150:8000/api'
-  URL: string = 'https://af3b-93-174-93-20.ngrok-free.app/api'
+  URL: string = 'https://hadir-aja.web-ditya.my.id/api'
   token: any = localStorage.getItem('token');
 
   httpHeader = {
@@ -36,7 +36,7 @@ export class RestService {
 
   initHeader() {
     console.log('init header', this.token)
-    this.httpHeader.headers = new HttpHeaders({ 
+    this.httpHeader.headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${this.token}`
     })
@@ -46,8 +46,15 @@ export class RestService {
     const headers = {
       'Authorization': `Bearer `+localStorage.getItem('token')
     }
-    
-    return this.http.get<any[]>(`${this.URL}/` + uri, { headers: headers }).pipe(
+
+    const req: object = {
+      params: param,
+      headers: headers
+    }
+
+    console.log('req', req)
+
+    return this.http.get<any[]>(`${this.URL}/` + uri, req).pipe(
       tap((_) => console.log(`any fetched: ${uri}`)),
       catchError(this.handleError<any[]>(`Get student uri=${uri}`))
     );
@@ -105,7 +112,7 @@ export class RestService {
       //     icon: 'alert-circle-outline',
       //     swipeGesture: 'vertical',
       //   });
-    
+
       //   await toast.present();
       // })
 

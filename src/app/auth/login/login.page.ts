@@ -18,9 +18,9 @@ import { StorageService } from 'src/app/services/storage.service';
 export class LoginPage implements OnInit {
   state: String = 'login';
   loginForm!: FormGroup;
-  
+
   constructor(
-    private loadingCtrl: LoadingController, 
+    private loadingCtrl: LoadingController,
     public navCtrl: NavController,
 
     private rest: RestService,
@@ -59,16 +59,17 @@ export class LoginPage implements OnInit {
     this.rest.post('login', this.loginForm.value, {})
     .subscribe(async (data) => {
       console.log('data', data);
+      console.log(JSON.stringify(data))
+      loading.dismiss();
 
       await this.auth.setAuth(data);
-      loading.dismiss();
       // this.goAnOtherPage('/pages/home');
       this.router.navigateByUrl('/pages/home');
     });
   }
 
   async goAnOtherPage(page: string) {
-    
+
     this.navCtrl.navigateForward(page);
   }
 

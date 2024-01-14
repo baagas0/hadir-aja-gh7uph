@@ -1,7 +1,7 @@
 import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { PresenceHistoryPageRoutingModule } from './presence-history-routing.module';
 
@@ -12,7 +12,9 @@ import { PresenceHistoryPage } from './presence-history.page';
     IonicModule,
     CommonModule,
     FormsModule,
-    PresenceHistoryPageRoutingModule
+    PresenceHistoryPageRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   declarations: [PresenceHistoryPage]
 })

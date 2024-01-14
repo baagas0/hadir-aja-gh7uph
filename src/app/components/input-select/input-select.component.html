@@ -1,0 +1,20 @@
+<div>
+  <!-- <ion-label>{{ placeholder }}</ion-label> -->
+  <ionic-selectable
+    [id]="uri"
+    class="select-muted px-3"
+    [ngClass]="{
+      'select-outline-muted': outline
+    }"
+    [items]="datas"
+    itemTextField="name"
+    (onOpen)="getData()"
+    [(ngModel)]="dataSelected"
+    [canSearch]="false"
+    (onChange)="dataChange($event)"
+    [hasInfiniteScroll]="true"
+    (onInfiniteScroll)="getMoreData($event)"
+    [placeholder]="placeholder"
+  >
+  </ionic-selectable>
+</div>

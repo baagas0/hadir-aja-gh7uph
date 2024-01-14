@@ -1,0 +1,91 @@
+<ion-router-outlet></ion-router-outlet>
+<ion-header>
+  <ion-toolbar class="card-header bg-white">
+    <div>
+      <ion-card-content>
+        <div class="d-flex flex-row justify-content-start align-items-center">
+          <ion-icon
+            name="close-outline"
+            class="text-black"
+            style="font-size: 24px; margin-right: 1rem"
+            (click)="this.navCtrl.back()"
+          ></ion-icon>
+
+          <h5 class="text-black text-w-600">Presensi Kelas | Detail</h5>
+        </div>
+      </ion-card-content>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content [fullscreen]="true" style="background-color: #fff;">
+
+
+  <div class="home-content" style="margin-top: -17px; min-height: 100%; background-color: #fff; border-radius: 17px;">
+    <div class="card" style="border-radius: 17px; border-bottom: 0px; border-left: 0px; border-right: 0px; min-height: 100%;">
+      <div class="card-body mt-4" style="min-height: 100%;">
+
+        <div class="d-flex justify-content-start align-items-center gap-10 mb-4">
+          <div class="logo" style="width: 65px; height: 65px;">
+            <img src="./assets/img/icon-user.png" style="width: 40px; height: auto;" alt="">
+          </div>
+          <div>
+            <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">{{ presence_barcode?.title }}</h5>
+            <p class="mb-0" style="font-size: 13px;">{{ rMoment(presence_barcode?.date, 'YYYY-MM-DD').locale('id').format('dddd, D MMM Y') }}</p>
+            <p class="mb-0" style="font-size: 13px;">{{ rMoment(presence_barcode?.actual_hour_in, 'H:mm').locale('id').format('H:mm') }} - {{ rMoment(presence_barcode?.actual_hour_out, 'H:mm').locale('id').format('H:mm') }} WIB</p>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column justify-content-center align-items-center mb-4">
+          <small>Scan Disini</small>
+          <img [src]="'https://chart.googleapis.com/chart?cht=qr&chl='+ presence_barcode?.qr_code +'&chs=250x250&choe=UTF-8&chld=L|2'" style="width: 100%;" alt="" class="img-thumbnail">
+        </div>
+
+
+        <div class="d-flex gap-10 mb-3">
+          <div class="px-2 py-2" style="width: 100%; min-height: 50px; border: 1px solid #17C653; border-radius: var(--bs-border-radius);">
+            <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">Presensi Hadir</h5>
+
+            <h3 style="color: #17C653;">{{ presence_barcode?.hadir }}</h3>
+          </div>
+          <div class="px-2 py-2" style="width: 100%; min-height: 50px; border: 1px solid #F8285A; border-radius: var(--bs-border-radius);">
+            <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">Presensi Mangkir</h5>
+
+            <h3 style="color: #F8285A;">{{ presence_barcode?.mangkir }}</h3>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+
+            <div class="d-flex flex-row justify-content-between align-items-center gap-10" *ngFor="let item of presence_barcode?.barcode_user">
+
+              <div class="d-flex gap-10">
+
+                <div class="logo" *ngIf="item?.school_user?.selfie_img" style="width: 50px; height: 50px;">
+                  <img [src]="path_asset + item?.school_user?.selfie_img" alt="" style="width: 40px;height: 40px;border-radius: 40px;">
+                </div>
+
+                <div class="d-flex flex-column justify-content-center">
+                  <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">{{ item?.school_user?.student_name }} <span class="badge" style="background-color: #FFF8DD; font-size: 11px; color: #2d2d2d;   border: 1px solid #FFC107;">{{ item?.status?.charAt(0).toUpperCase() + item?.status?.slice(1) }}</span></h5>
+                  <p class="mb-0" style="font-size: 13px;" *ngIf="item.state === 'tidak diketahui'">Belum Absen</p>
+                  <p class="mb-0" style="font-size: 13px;" *ngIf="item.state !== 'tidak diketahui'">{{ item?.hour_in ? rMoment(item?.hour_in, 'H:mm').format('H:mm') : '-' }} - {{ item?.hour_out ? rMoment(item?.hour_out, 'H:mm').format('H:mm') : '-' }} WIB</p>
+                </div>
+
+              </div>
+
+              <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">{{ item?.duration }}<small>m</small></h5>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</ion-content>

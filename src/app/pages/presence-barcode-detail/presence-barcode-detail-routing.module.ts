@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TakePage } from './take.page';
+import { PresenceBarcodeDetailPage } from './presence-barcode-detail.page';
 
 const routes: Routes = [
   {
     path: '',
-    component: TakePage,
+    component: PresenceBarcodeDetailPage,
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
 })
-export class TakePageRoutingModule {}
+export class PresenceBarcodeDetailPageRoutingModule {}

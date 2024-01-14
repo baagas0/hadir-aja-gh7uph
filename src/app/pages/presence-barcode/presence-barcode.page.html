@@ -1,0 +1,86 @@
+<ion-router-outlet></ion-router-outlet>
+<ion-header>
+  <ion-toolbar class="card-header bg-white">
+    <div>
+      <ion-card-content>
+        <div class="d-flex flex-row justify-content-start align-items-center">
+          <ion-icon
+            name="close-outline"
+            class="text-black"
+            style="font-size: 24px; margin-right: 1rem"
+            (click)="this.navCtrl.back()"
+          ></ion-icon>
+          <h5 class="text-black text-w-600">Presensi Kelas</h5>
+          <div class="text-black" hidden>
+            <ion-icon name="filter" color="white" class="mx-3"></ion-icon>
+            <ion-icon name="search" color="white"></ion-icon>
+          </div>
+        </div>
+      </ion-card-content>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+
+
+<ion-content [fullscreen]="true" style="background-color: #fff;">
+
+
+  <div class="home-content" style="margin-top: -17px; min-height: 100%; background-color: #fff; border-radius: 17px;">
+    <div class="card" style="border-radius: 17px; border-bottom: 0px; border-left: 0px; border-right: 0px; min-height: 100%;">
+      <div class="card-body" style="min-height: 100%;">
+
+        <div class="d-flex flex-column justify-content-between align-items-center mt-3 mb-3" style="min-height: 50px; border: 1px dashed #a4a4a4;border-radius: 10px;">
+          <h5 class="text-dark mt-3 mb-3" style="font-weight: 600; font-size: 15px;">Buat Presensi Kelas</h5>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="spinner-border text-primary" *ngIf="loaderGetHistory" role="status" style="width: 20px;height: 20px;border: 1 solid currentcolor;">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+
+        <div class="card" *ngIf="presence_history.length === 0 && loaderGetHistory === false">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center justify-content-center">
+              <img src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/misc/upgrade.svg" alt="" style="width: 30%;" srcset="">
+              <h3 class="font-weight-bolder">Belum ada aktivitas</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column" *ngIf="presence_history.length > 0 && loaderGetHistory === false">
+
+          <div class="card mb-3 mt-3" style="border: 0px solid; border-radius: 10px;" *ngFor="let item of presence_history" (click)="goToDetail(item)">
+            <div class="card-body" style="border-radius: 10px; border: 1px solid #a4a4a4;">
+
+              <div class="btn-group btn-sm" role="group" aria-label="Basic example" style="margin-top: -55px;">
+                <button type="button" class="btn btn-sm btn-success">H: {{ item.hadir }}</button>
+                <!-- <button type="button" class="btn btn-sm btn-secondary">Izin: 20</button> -->
+                <button type="button" class="btn btn-sm btn-warning">M: {{ item.mangkir }}</button>
+              </div>
+
+              <div class="d-flex gap-10">
+
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div class="d-flex flex-column justify-content-center">
+                    <h5 class="mt-0 mb-0" style="font-size: 13px; font-weight: 500;">{{ item.title }}</h5>
+                    <!-- <p class="text-dark mt-0 mb-0" style="font-size: 11px;">{{ rMoment(item?.date, 'YYYY-MM-DD').locale('id').format('D MMM Y') }}</p> -->
+                    <p class="text-dark mt-0 mb-0" style="font-size: 11px;">{{ rMoment(item?.actual_hour_in, 'H:mm').locale('id').format('H:mm') }} - {{ rMoment(item?.actual_hour_out, 'H:mm').locale('id').format('H:mm') }} WIB</p>
+                  </div>
+
+                  <!-- <h5 class="mt-0 mb-0" style="font-size: 14px; font-weight: 600;">{{ rMoment(item?.actual_hour_in, 'H:mm').locale('id').format('H:mm') }} WIB</h5> -->
+                  <h5 class="mt-0 mb-0" style="font-size: 14px; font-weight: 600;">{{ rMoment(item?.date, 'YYYY-MM-DD').locale('id').format('D MMM Y') }}</h5>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</ion-content>

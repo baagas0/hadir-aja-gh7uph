@@ -3,17 +3,16 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { TakePageRoutingModule } from './take-routing.module';
+import { PresenceBarcodePageRoutingModule } from './presence-barcode-routing.module';
 
-import { TakePage } from './take.page';
-
+import { PresenceBarcodePage } from './presence-barcode.page';
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    TakePageRoutingModule
+    PresenceBarcodePageRoutingModule,
   ],
-  declarations: [TakePage]
+  declarations: [PresenceBarcodePage]
 })
-export class TakePageModule {}
+export class PresenceBarcodePageModule {}

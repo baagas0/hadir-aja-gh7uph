@@ -1,0 +1,51 @@
+ion-modal {
+  --ion-background-color: #ffffff !important;
+  --ion-background: #ffffff !important;
+  --background: #ffffff !important;
+}
+
+ion-loading.custom-loading {
+  --background: #e3edff;
+  --spinner-color: #1c6dff;
+
+  color: #1c6dff;
+}
+
+.home-top {
+  // background-color: rgba(171, 207, 210, 0.5);
+  background-image: url('/assets/img/background.jpg');
+  background-size: contain;
+  height: 25% !important;
+}
+
+.logo {
+  height: 35px;
+  width: 35px;
+  background-color: #E2EAF7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 35px;
+}
+
+.logo img {
+  height: 18px;
+  height: 18px;
+}
+
+.custom-toast {
+  --background: #3232c4;
+  --box-shadow: 3px 3px 10px 0 rgba(213, 13, 13, 0.2);
+  --color: #11e01b;
+}
+
+.custom-toast::part(message) {
+  font-style: italic;
+}
+
+.custom-toast::part(button) {
+  border-left: 1px solid #d2d2d2;
+  color: #030207;
+  font-size: 15px;
+}

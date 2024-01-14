@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController } from '@ionic/angular';
-
-// import { Camera, CameraDirection, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
-import { Category, DrawingUtils, FaceLandmarker, FilesetResolver } from '@mediapipe/tasks-vision';
+import { LoadingController, ModalController, NavController } from '@ionic/angular';
+import { RestService } from 'src/app/services/rest.service';
+import * as moment from 'moment';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-presence-history',
@@ -10,41 +10,68 @@ import { Category, DrawingUtils, FaceLandmarker, FilesetResolver } from '@mediap
   styleUrls: ['presence-history.page.scss']
 })
 export class PresenceHistoryPage {
-  // ML Model and properties (WASM & Model provided by Google, you can place your own).
-  faceLandmarker!: FaceLandmarker;
-  wasmUrl: string = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm";
-  modelAssetPath: string = "https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task";
-  // Native elements we need to interact to later.
-  video!: HTMLVideoElement;
-  canvasElement!: HTMLCanvasElement;
-  canvasCtx!: CanvasRenderingContext2D;
-  // A state to toggle functionality.
-  showingPreview: boolean = false;
-  // A challenge state for the user.
-  userDidBlink: boolean = false;
 
-  tracking: boolean = false;
-  
+
+  historyForm!: FormGroup;
+  month_year_text: string = '';
+
+  public presence_history: any = [];
+  public loaderGetHistory: boolean = false;
+
   constructor(
     private loadingCtrl: LoadingController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    public rest: RestService,
+    public modal: ModalController
   ) { }
 
-  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
-  async ngOnInit(): Promise<void> {
-    this.faceLandmarker = await FaceLandmarker.createFromOptions(await FilesetResolver.forVisionTasks(this.wasmUrl), {
-      baseOptions: { modelAssetPath: this.modelAssetPath, delegate: "GPU" },
-      outputFaceBlendshapes: true, // We will draw the face mesh in canvas.
-      runningMode: "VIDEO",
-    }); // When FaceLandmarker is ready, you'll see in the console: Graph successfully started running.
-  }
-  // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
-  async ngAfterViewInit(): Promise<void> {
-    this.video = document.getElementById("user-video") as HTMLVideoElement;
-    this.canvasElement = document.getElementById("user-canvas") as HTMLCanvasElement;
-    this.canvasCtx = this.canvasElement.getContext("2d") as CanvasRenderingContext2D;
+  async ionViewDidEnter(){
+
+    this.historyForm = new FormGroup({
+      month_year: new FormControl(moment(new Date()).format('YYYY-MM-DD'),),
+    });
+
+    this.month_year_text = this.rMoment(this.historyForm?.value?.month_year, 'Y-M-D').format('MMMM y');
+
+    await this.getPresenceHistory();
+
+    console.log('ionViewDidEnter', this.historyForm.value)
+
   }
 
+  async handleRefresh(event: any = null) {
+    await this.getPresenceHistory();
 
+    if(event !== null) event?.target.complete()
+  }
+
+  async getPresenceHistory(event: any = null) {
+    console.log('getPresenceHistory', this.historyForm?.value)
+    this.loaderGetHistory = true;
+    this.modal?.dismiss('modal-filter');
+    this.month_year_text = this.rMoment(this.historyForm?.value?.month_year, 'Y-M-D').format('MMMM y');
+    console.log(this.month_year_text)
+
+    this.rest.get('presence/history', this.historyForm?.value)
+    .subscribe(async (data: any) => {
+      this.loaderGetHistory = false;
+      console.log('data', data);
+      this.presence_history = data.data
+
+
+      if(event !== null) event?.target.complete()
+    });
+  }
+
+  rMoment(date: string, format : any = '') {
+    const m = moment(date, [format]);
+    m.locale('id');
+
+    return m;
+  }
+
+  async goAnOtherPage(page: string) {
+    this.navCtrl.navigateForward(page);
+  }
 
 }

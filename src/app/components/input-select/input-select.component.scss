@@ -1,0 +1,12 @@
+.ion-content-scroll-host {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+}
+
+ion-toolbar .toolbar-container {
+  background-color: #f8f8f8 !important;
+}
