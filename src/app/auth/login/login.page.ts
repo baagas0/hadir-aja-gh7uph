@@ -65,7 +65,9 @@ export class LoginPage implements OnInit {
       console.log(JSON.stringify(data))
 
       await this.auth.setAuth(data);
-      await BarcodeScanner.installGoogleBarcodeScannerModule();
+
+      const { available } = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
+      if (available == false) await BarcodeScanner.installGoogleBarcodeScannerModule(); // INSTALL GOOGLE BARCODE JIKA BELUM
 
       loading.dismiss();
       // this.goAnOtherPage('/pages/home');
