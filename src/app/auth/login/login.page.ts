@@ -9,6 +9,9 @@ import { AuthService } from 'src/app/services/auth.service';
 // import { FirebaseService } from 'src/app/services/firebase.service';
 import { RestService } from 'src/app/services/rest.service';
 import { StorageService } from 'src/app/services/storage.service';
+import {
+  BarcodeScanner,
+} from '@capacitor-mlkit/barcode-scanning';
 
 @Component({
   selector: 'app-login',
@@ -60,9 +63,11 @@ export class LoginPage implements OnInit {
     .subscribe(async (data) => {
       console.log('data', data);
       console.log(JSON.stringify(data))
-      loading.dismiss();
 
       await this.auth.setAuth(data);
+      await BarcodeScanner.installGoogleBarcodeScannerModule();
+
+      loading.dismiss();
       // this.goAnOtherPage('/pages/home');
       this.router.navigateByUrl('/pages/home');
     });

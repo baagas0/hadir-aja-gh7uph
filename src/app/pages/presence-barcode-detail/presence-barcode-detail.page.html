@@ -40,7 +40,7 @@
 
         <div class="d-flex flex-column justify-content-center align-items-center mb-4">
           <small>Scan Disini</small>
-          <img [src]="'https://chart.googleapis.com/chart?cht=qr&chl='+ presence_barcode?.qr_code +'&chs=250x250&choe=UTF-8&chld=L|2'" style="width: 100%;" alt="" class="img-thumbnail">
+          <img [src]="'https://api.qrserver.com/v1/create-qr-code/?color=000000&bgcolor=FFFFFF&data='+ presence_barcode?.qr_code +'&qzone=1&margin=0&size=250x250&ecc=L'" style="width: 100%;" alt="" class="img-thumbnail">
         </div>
 
 
