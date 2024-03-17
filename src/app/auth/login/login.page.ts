@@ -19,7 +19,7 @@ import {
   styleUrls: ['login.page.scss']
 })
 export class LoginPage implements OnInit {
-  state: 'pre-login' | 'login' = 'pre-login';
+  state: String = 'login';
   loginForm!: FormGroup;
 
   constructor(
@@ -66,8 +66,8 @@ export class LoginPage implements OnInit {
 
       await this.auth.setAuth(data);
 
-      // const { available } = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
-      // if (available == false) await BarcodeScanner.installGoogleBarcodeScannerModule(); // INSTALL GOOGLE BARCODE JIKA BELUM
+      const { available } = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
+      if (available == false) await BarcodeScanner.installGoogleBarcodeScannerModule(); // INSTALL GOOGLE BARCODE JIKA BELUM
 
       loading.dismiss();
       // this.goAnOtherPage('/pages/home');

@@ -1,132 +1,259 @@
-<ion-menu content-id="main-content" class="h-100">
-  <ion-header>
-    <ion-toolbar>
-      <ion-title>Menu Content</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">This is the menu content.</ion-content>
-</ion-menu>
 
-<div class="d-flex flex-column h-100" id="main-content">
-  <div style="background-image: url(./assets/icon/m_header_a.jpg); background-size: cover; height: 60px;" class="d-flex align-items-center">
-    <ion-buttons slot="start" style="color: #fff;">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-  </div>
+<ion-content [fullscreen]="true" style="background-color: #fff;">
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
 
-  <div class="h-100" style="background-color: #fff;">
-    <div class="mt-2 ml-2" style="display: inline-block; overflow: hidden; position: relative; width: 100%;">
+  <div class="home-top ion-padding">
+    <div class="top-bar d-flex flex-column h-100">
+      <div class="d-flex justify-content-between gap-10">
 
-      <img src="./assets/icon/header-1.png" alt="" height="" style="pointer-events: none; position: absolute; height: 100%; z-index: 1; right: 0">
+        <div class="d-flex justify-content-start gap-10">
+          <div class="logo">
+            <img src="./assets/img/logo-tr.png" alt="">
+          </div>
+          <!-- <div class="logo">
+            <img src="./assets/img/logo-udinus.jpg" alt="" style="width: 30px;height: 30px;border-radius: 30px;">
+          </div> -->
+          <div class="logo" *ngIf="user?.selfie_img">
+            <img [src]="path_asset + user?.selfie_img" alt="" style="width: 30px;height: 30px;border-radius: 30px;">
+          </div>
+          <div>
+            <p class="mb-0 text-dark mb-0" style="font-size: 12px; font-weight: 500;">{{ user?.student_name }}</p>
+            <p class="mb-0 text-dark" style="font-size: 12px;">{{ user?.school_group?.group_name }}</p>
+          </div>
+        </div>
 
-      <img src="./assets/icon/Logo-Toyota-Lets-Go-Beyond.png" alt="" height="" style="width: 100px;">
-      <p class="mb-0"><b>Hi, baagas0&#64;gmail.com</b></p>
-      <p class="mb-0">Ayo atur personalisasimu untuk <br> pelayanan lebih maksimal</p>
-      <p class="mb-0"><b>Atur Sekarang</b></p>
-      <p>height: {{ screenHeight }}, width: {{ screenWidth }}</p>
+        <div style="width: 30px; height: 30px; background-color: #FFE2E5; border-radius: 10px;display: flex; justify-content: center; align-items: center; color: red;" (click)="logout()">
+          <span class="svg-icon svg-icon-muted svg-icon-2hx text-warning" style="color: #F64E60 ;">
+            <!--begin::Svg Icon | path:/var/www/preview.keenthemes.com/metronic/releases/2021-05-14-112058/theme/html/demo1/dist/../src/media/svg/icons/Electric/Shutdown.svg-->
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+              <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                  <rect x="0" y="0" width="24" height="24"/>
+                  <path d="M7.62302337,5.30262097 C8.08508802,5.000107 8.70490146,5.12944838 9.00741543,5.59151303 C9.3099294,6.05357769 9.18058801,6.67339112 8.71852336,6.97590509 C7.03468892,8.07831239 6,9.95030239 6,12 C6,15.3137085 8.6862915,18 12,18 C15.3137085,18 18,15.3137085 18,12 C18,9.99549229 17.0108275,8.15969002 15.3875704,7.04698597 C14.9320347,6.73472706 14.8158858,6.11230651 15.1281448,5.65677076 C15.4404037,5.20123501 16.0628242,5.08508618 16.51836,5.39734508 C18.6800181,6.87911023 20,9.32886071 20,12 C20,16.418278 16.418278,20 12,20 C7.581722,20 4,16.418278 4,12 C4,9.26852332 5.38056879,6.77075716 7.62302337,5.30262097 Z" fill="#000000" fill-rule="nonzero"/>
+                  <rect fill="#000000" opacity="0.3" x="11" y="3" width="2" height="10" rx="1"/>
+              </g>
+            </svg><!--end::Svg Icon-->
+          </span>
+        </div>
 
-    </div>
 
-    <div style="margin: 1rem;">
-      <div class="row">
-        <div class="col-4 text-center" style="margin-top: 3.5rem;">
-          <img src="./assets/icon/menu-1.png" alt="" style="width: 80px;">
-          <p>Penjualan</p>
-        </div>
-        <div class="col-4 text-center" style="margin-top: 3.5rem;">
-          <img src="./assets/icon/menu-2.png" alt="" style="width: 80px;">
-          <p>Bengkel</p>
-        </div>
-        <div class="col-4 text-center" style="margin-top: 3.5rem;">
-          <img src="./assets/icon/menu-3.png" alt="" style="width: 80px;">
-          <p>Cari Dealer</p>
-        </div>
-        <div class="col-4 text-center" style="margin-top: 3.5rem;">
-          <img src="./assets/icon/menu-4.png" alt="" style="width: 80px;">
-          <p>Booking Service</p>
-        </div>
-        <div class="col-4 text-center" style="margin-top: 3.5rem;">
-          <img src="./assets/icon/menu-5.png" alt="" style="width: 80px;">
-          <p>Promo</p>
-        </div>
-        <div class="col-4 text-center" style="margin-top: 3.5rem;">
-          <img src="./assets/icon/menu-6.png" alt="" style="width: 80px;">
-          <p>My Toyota</p>
-        </div>
+
       </div>
-
-      <div class="row mt-3">
-        <p class="mb-1"><b>Promo</b></p>
-
-        <img [src]="promos[0].imglink" alt="">
+      <div class="d-flex flex-column justify-content-center align-items-center h-100">
+        <h2 class="mb-0 text-dark">Hallo<span><img src="./assets/img/waving-hand.png" style="width: 50px;" alt=""></span>{{ user?.student_name?.split(' ')[0] }}</h2>
+        <p class="text-dark" style="font-size: 13px;">Semangat Belajarnya Ya!</p>
       </div>
     </div>
   </div>
-</div>
+  <div class="home-content" style="margin-top: -17px; min-height: 100%; background-color: #fff; border-radius: 17px;">
+    <div class="card" style="border-radius: 17px; border-bottom: 0px; border-left: 0px; border-right: 0px; min-height: 100%;">
+      <div class="card-body" style="min-height: 100%;">
 
-<div class="fab-wrapper">
-  <div class="bg-wrap" style="background-color: rgb(0, 0, 0, 0.5);"></div>
-  <input id="fabCheckbox" type="checkbox" class="fab-checkbox" />
-  <label class="fab" for="fabCheckbox">
-    <span class="fab-dots fab-dots-1"></span>
-    <span class="fab-dots fab-dots-2"></span>
-    <span class="fab-dots fab-dots-3"></span>
-  </label>
-  <div class="fab-wheel" [style]="'width: ' + (screenWidth-62) + 'px; height: ' + (screenHeight-120) + 'px'">
-    <!-- <a class="fab-action fab-action-1">
-      <i class="fas fa-question"></i>
-    </a>
-    <a class="fab-action fab-action-2">
-      <i class="fas fa-book"></i>
-    </a>
-        <a class="fab-action fab-action-3">
-      <i class="fas fa-address-book"></i>
-    </a>
-        <a class="fab-action fab-action-4">
-      <i class="fas fa-info"></i>
-    </a> -->
-    <div style="background-color: #fff;" class="p-3 d-flex justify-content-between align-items-center">
-      <img src="./assets/icon/baru_nasmoco_png.png" class="" alt="" style="width: 30%;">
+        <!-- WARNING -->
+        <div class="card mt-2" style="border-radius: 12px; background-color: #FFF8DD;" *ngIf="this.user?.selfie_img === null">
+          <div class="card-body">
+            <div class="d-flex flex-row align-items-start gap-10">
+              <ion-icon name="alert-circle-outline"></ion-icon>
+              <div>
+                <p class=" mt-0" style="font-size: 12px;">Update foto anda untuk melakukan presensi!</p>
+                <button class="btn btn-sm btn-primary" (click)="takeSelfie()">Update Foto</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
-      <ion-icon name="close-outline" size="large"></ion-icon>
-    </div>
-    <div class="messages">
-			<ul>
-				<!-- <li class="sent">
-					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-					<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-				</li> -->
-				<li class="replies">
-					<p>Harga Mobil Terbaru.</p>
-				</li>
-				<li class="sent">
-					<p>Hai kak, ingin mobiol seri apa?.</p>
-				</li>
-				<li class="replies">
-					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-					<p>Avanza</p>
-				</li>
-				<li class="sent">
-					<p>Berikut daftar harga mobil avanza</p>
-					<p>1. 2022 Toyota Avanza 1.3 M/T 233jt</p>
-					<p>2. 2022 Toyota Avanza 1.3 M/T 233jt</p>
-					<p>3. 2022 Toyota Avanza 1.3 M/T 233jt</p>
-					<p>4. 2022 Toyota Avanza 1.3 M/T 233jt</p>
-					<p>5. 2022 Toyota Avanza 1.3 M/T 233jt</p>
-				</li>
+        <!-- Absen Status -->
+        <div class="card mt-2" style="border-radius: 12px;" [style]="presenceStatus === 'not-ready' ? ' background-color: #d7d7d7;' : ''">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between">
+              <div>
+                <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">15:51 WIB</h5>
+                <p style="font-size: 13px;">Jam belajar kamu pukul {{ presence?.actual_hour_in ? rMoment(presence?.actual_hour_in, 'hh:mm').format('hh:mm') : '00:00' }} - {{ presence?.actual_hour_in ? rMoment(presence?.actual_hour_out, 'hh:mm').format('hh:mm') : '00:00' }}</p>
+              </div>
+              <div id="modal-absent-report" expand="block">
+                <ion-icon name="ellipsis-horizontal-outline"></ion-icon>
+              </div>
+            </div>
 
-			</ul>
-		</div>
+            <!-- Button Absen -->
+            <div class="d-flex gap-10 justify-content-center">
+              <div class="d-flex justify-content-center align-items-center">
+                <div class="spinner-border text-primary" *ngIf="loaderGetPresence" role="status" style="width: 20px;height: 20px;border: 1 solid currentcolor;">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+              </div>
+              <button id="open-loading" class="btn btn-primary btn-lg w-100 fs-10" style="font-size: 12px; height: 50px;" *ngIf="loaderGetPresence === false" (click)="takePresence('in')" [disabled]="presenceIn === false">
+                {{ presence?.hour_in ? rMoment(presence?.hour_in, 'H:mm').format('H:mm') + ' WIB' : 'Masuk' }}
+              </button>
+              <button class="btn border btn-lg w-100 fs-10" [ngClass]="presence?.hour_out ? 'btn-primary' : 'btn-light'" style="font-size: 12px; height: 50px;"  *ngIf="loaderGetPresence === false" (click)="takePresence('out')" [disabled]="presenceOut === false">
+                {{ presence?.hour_out ? rMoment(presence?.hour_out, 'H:mm').format('H:mm') + ' WIB' : 'Keluar' }}
+              </button>
+            </div>
+            <div class="" *ngIf="presence?.state === 'pulang'">
+              <label for="" class="text-danger" style="font-size: 11px;">*Durasi belajar anda: {{ presence?.duration }} menit</label>
+            </div>
 
-    <div class="message-input">
-			<div class="d-flex gap-10 pl-3 pr-3 pb-2" style="flex-flow: wrap;padding: 1rem 0rem 3rem 0.5rem;">
-        <button class="btn btn-outline-primary">Daftar Harga Mobil Terbaru</button>
-        <!-- <button class="btn btn-outline-primary">Cari Dealer Lain</button> -->
-        <button class="btn btn-outline-primary">Layanan Bengkel</button>
-        <button class="btn btn-outline-primary">Promo Toyota</button>
-        <!-- <button class="btn btn-outline-primary">Booking Layanan</button> -->
+            <!-- Button Absen Kelas -->
+            <div class="d-flex gap-10 mt-3" *ngIf="loaderGetPresence === false">
+              <button class="btn btn-light border btn-lg w-100 fs-10 text-primary" style="font-size: 12px; height: 50px; border-radius: 30px;" [disabled]="presenceStatus === 'not-ready'" (click)="handlePresenceKelasButton()">
+                Absen Kelas
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
+          <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">Aktivitas Anda</h5>
+          <label for="" class="text-primary mt-0 mb-0" style="font-size: 11px;" (click)="goAnOtherPage('pages/presence-history')">Lihat semua</label>
+        </div>
+
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="spinner-border text-primary" *ngIf="loaderGetHistory" role="status" style="width: 20px;height: 20px;border: 1 solid currentcolor;">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+
+        <div class="card" *ngIf="presence_history.length === 0 && loaderGetHistory === false">
+          <div class="card-body">
+            <div class="d-flex flex-column align-items-center justify-content-center">
+              <img src="https://preview.keenthemes.com/metronic8/demo1/assets/media/illustrations/misc/upgrade.svg" alt="" style="width: 30%;" srcset="">
+              <h3 class="font-weight-bolder">Belum ada aktivitas</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-column" *ngIf="presence_history.length > 0 && loaderGetHistory === false">
+
+          <div class="card mb-3" style="border: 0px solid; border-radius: 10px;" *ngFor="let item of presence_history">
+            <div class="card-body" style="border-radius: 10px; box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px, rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;">
+              <div class="d-flex gap-10">
+
+                <div *ngIf="item?.type === 'in'" style="width: 40px; height: 40px; background-color: #F1FAFF; border-radius: 10px;display: flex; justify-content: center; align-items: center;">
+                  <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr096.svg-->
+                  <span class="svg-icon svg-icon-muted svg-icon-2hx text-primary" style="">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect opacity="0.3" width="12" height="2" rx="1" transform="matrix(-1 0 0 1 20 11)" fill="currentColor"/>
+                      <path d="M18.1313 11.6927L16.3756 10.2297C15.9054 9.83785 15.8732 9.12683 16.306 8.69401C16.6957 8.3043 17.3216 8.28591 17.7336 8.65206L20.6592 11.2526C21.1067 11.6504 21.1067 12.3496 20.6592 12.7474L17.7336 15.3479C17.3216 15.7141 16.6957 15.6957 16.306 15.306C15.8732 14.8732 15.9054 14.1621 16.3756 13.7703L18.1313 12.3073C18.3232 12.1474 18.3232 11.8526 18.1313 11.6927Z" fill="currentColor"/>
+                      <path opacity="0.5" d="M16 5V6C16 6.55228 15.5523 7 15 7C14.4477 7 14 6.55228 14 6C14 5.44772 13.5523 5 13 5H6C5.44771 5 5 5.44772 5 6V18C5 18.5523 5.44771 19 6 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 14.4477 17 15 17C15.5523 17 16 17.4477 16 18V19C16 20.1046 15.1046 21 14 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14C15.1046 3 16 3.89543 16 5Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                    <!--end::Svg Icon-->
+                </div>
+
+                <div *ngIf="item?.type === 'out'" style="width: 40px; height: 40px; background-color: #FFF4DE; border-radius: 10px;display: flex; justify-content: center; align-items: center;">
+                  <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr096.svg-->
+                  <span class="svg-icon svg-icon-muted svg-icon-2hx text-warning" style="">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <rect opacity="0.3" x="8.5" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+                      <path d="M10.3687 11.6927L12.1244 10.2297C12.5946 9.83785 12.6268 9.12683 12.194 8.69401C11.8043 8.3043 11.1784 8.28591 10.7664 8.65206L7.84084 11.2526C7.39332 11.6504 7.39332 12.3496 7.84084 12.7474L10.7664 15.3479C11.1784 15.7141 11.8043 15.6957 12.194 15.306C12.6268 14.8732 12.5946 14.1621 12.1244 13.7703L10.3687 12.3073C10.1768 12.1474 10.1768 11.8526 10.3687 11.6927Z" fill="currentColor"/>
+                      <path opacity="0.5" d="M16 5V6C16 6.55228 15.5523 7 15 7C14.4477 7 14 6.55228 14 6C14 5.44772 13.5523 5 13 5H6C5.44771 5 5 5.44772 5 6V18C5 18.5523 5.44771 19 6 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 14.4477 17 15 17C15.5523 17 16 17.4477 16 18V19C16 20.1046 15.1046 21 14 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14C15.1046 3 16 3.89543 16 5Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                    <!--end::Svg Icon-->
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center w-100">
+                  <div class="d-flex flex-column justify-content-center">
+                    <h5 class="mt-0 mb-0" style="font-size: 13px; font-weight: 500;">Absen {{ item.ref_table === 'presence_barcode_school_users' ? 'Kelas | ' : 'Harian |' }} {{ item?.type === 'in' ? 'Masuk' : (item?.type === 'out' ? 'Keluar' : '-') }}</h5>
+                    <p class="text-dark mt-0 mb-0" style="font-size: 11px;">{{ rMoment(item?.presence?.presence_date, 'YYYY-MM-DD').locale('id').format('D MMM Y') }}</p>
+                  </div>
+
+                  <h5 class="mt-0 mb-0" style="font-size: 14px; font-weight: 600;">{{ rMoment(item?.datetime, 'H:mm').locale('id').format('H:mm') }} WIB</h5>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-		</div>
-
+    </div>
   </div>
-</div>
+
+  <ion-modal #modal trigger="modal-absent-report" color="light" [initialBreakpoint]="0.5" [breakpoints]="[0, 0.5, 0.75]">
+    <ng-template>
+      <ion-content class="ion-padding" color="light">
+
+        <div class="d-flex align-items-center mt-3 mb-2 gap-10">
+          <h5 class="mb-0 mt-0" style="font-size: 15px; font-weight: 500;">Riwayat hari ini</h5>
+          <span class="badge" style="background-color: #FFF8DD; font-size: 11px; color: #2d2d2d;   border: 1px solid #FFC107;">{{ presence?.status?.charAt(0).toUpperCase() + presence?.status?.slice(1) }}</span>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-column">
+              <div class="d-flex flex-row align-items-center gap-10 mb-4">
+                <!-- <ion-icon name="arrow-redo-sharp" style="font-size: 32px;"></ion-icon> -->
+
+                <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr096.svg-->
+                <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect opacity="0.3" width="12" height="2" rx="1" transform="matrix(-1 0 0 1 20 11)" fill="currentColor"/>
+                  <path d="M18.1313 11.6927L16.3756 10.2297C15.9054 9.83785 15.8732 9.12683 16.306 8.69401C16.6957 8.3043 17.3216 8.28591 17.7336 8.65206L20.6592 11.2526C21.1067 11.6504 21.1067 12.3496 20.6592 12.7474L17.7336 15.3479C17.3216 15.7141 16.6957 15.6957 16.306 15.306C15.8732 14.8732 15.9054 14.1621 16.3756 13.7703L18.1313 12.3073C18.3232 12.1474 18.3232 11.8526 18.1313 11.6927Z" fill="currentColor"/>
+                  <path opacity="0.5" d="M16 5V6C16 6.55228 15.5523 7 15 7C14.4477 7 14 6.55228 14 6C14 5.44772 13.5523 5 13 5H6C5.44771 5 5 5.44772 5 6V18C5 18.5523 5.44771 19 6 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 14.4477 17 15 17C15.5523 17 16 17.4477 16 18V19C16 20.1046 15.1046 21 14 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14C15.1046 3 16 3.89543 16 5Z" fill="currentColor"/>
+                  </svg>
+                </span>
+                  <!--end::Svg Icon-->
+
+                <div style="flex-shrink: 1;">
+                  <p class="mb-1" style="font-size: 12px;">Absen Masuk</p>
+                  <h5 class="mb-0 mt-0" style="font-size: 14px;">{{ presence?.hour_in ? rMoment(presence?.hour_in, 'H:mm').format('H:mm') + ' WIB' : '-' }}</h5>
+                </div>
+              </div>
+
+              <div class="d-flex flex-row align-items-center gap-10">
+                <!-- <ion-icon name="arrow-redo-sharp" style="font-size: 32px;"></ion-icon> -->
+
+                <!--begin::Svg Icon | path: /var/www/preview.keenthemes.com/keenthemes/metronic/docs/core/html/src/media/icons/duotune/arrows/arr092.svg-->
+                <span class="svg-icon svg-icon-muted svg-icon-2hx"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect opacity="0.3" x="8.5" y="11" width="12" height="2" rx="1" fill="currentColor"/>
+                  <path d="M10.3687 11.6927L12.1244 10.2297C12.5946 9.83785 12.6268 9.12683 12.194 8.69401C11.8043 8.3043 11.1784 8.28591 10.7664 8.65206L7.84084 11.2526C7.39332 11.6504 7.39332 12.3496 7.84084 12.7474L10.7664 15.3479C11.1784 15.7141 11.8043 15.6957 12.194 15.306C12.6268 14.8732 12.5946 14.1621 12.1244 13.7703L10.3687 12.3073C10.1768 12.1474 10.1768 11.8526 10.3687 11.6927Z" fill="currentColor"/>
+                  <path opacity="0.5" d="M16 5V6C16 6.55228 15.5523 7 15 7C14.4477 7 14 6.55228 14 6C14 5.44772 13.5523 5 13 5H6C5.44771 5 5 5.44772 5 6V18C5 18.5523 5.44771 19 6 19H13C13.5523 19 14 18.5523 14 18C14 17.4477 14.4477 17 15 17C15.5523 17 16 17.4477 16 18V19C16 20.1046 15.1046 21 14 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H14C15.1046 3 16 3.89543 16 5Z" fill="currentColor"/>
+                  </svg>
+                </span>
+                <!--end::Svg Icon-->
+
+                <div style="flex-shrink: 1;">
+                  <p class="mb-1" style="font-size: 12px;">Absen Keluar</p>
+                  <h5 class="mb-0 mt-0" style="font-size: 14px;">{{ presence?.hour_out ? rMoment(presence?.hour_out, 'H:mm').format('H:mm') + ' WIB' : '-' }}</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h5 style="font-size: 15px; font-weight: 500;">Laporan bulan ini</h5>
+        <div class="d-flex gap-10 w-100">
+          <div class="d-flex flex-column justify-content-start w-100" style="flex-shrink: 1;">
+            <div class="card">
+              <div class="card-body">
+                <span class="bg-primary" style="height: 5px; width: 17px;display: inline-block;border-radius: 5px;"></span>
+                <p class="mb-0" style="font-size: 12px;">Hadir</p>
+                <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">{{ presence?.recap?.hadir }} Hari</h5>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column justify-content-start w-100" style="flex-shrink: 1;">
+            <div class="card">
+              <div class="card-body">
+                <span class="bg-warning" style="height: 5px; width: 17px;display: inline-block;border-radius: 5px;"></span>
+                <p class="mb-0" style="font-size: 12px;">Izin</p>
+                <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">{{ presence?.recap?.izin }} Hari</h5>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex flex-column justify-content-start w-100" style="flex-shrink: 1;">
+            <div class="card">
+              <div class="card-body">
+                <span class="bg-danger" style="height: 5px; width: 17px;display: inline-block;border-radius: 5px;"></span>
+                <p class="mb-0" style="font-size: 12px;">Absen</p>
+                <h5 class="mt-0 mb-0" style="font-size: 15px; font-weight: 500;">{{ presence?.recap?.mangkir }} Hari</h5>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</ion-content>
