@@ -42,19 +42,24 @@ export class RestService {
     })
   }
 
-  get(uri: any, param: any): Observable<any[]> {
+  get(uri: any, param: any, setHeaders: any = null): Observable<any[]> {
+
     const headers = {
       'Authorization': `Bearer `+localStorage.getItem('token')
     }
 
     const req: object = {
       params: param,
-      headers: headers
+      headers: setHeaders ? setHeaders : headers
     }
 
     console.log('req', req)
+    let url = ''
+    if (uri.includes('http')) url = uri
+    else url = `${this.URL}/` + uri
 
-    return this.http.get<any[]>(`${this.URL}/` + uri, req).pipe(
+    console.log(url)
+    return this.http.get<any[]>(url, req).pipe(
       tap((_) => console.log(`any fetched: ${uri}`)),
       catchError(this.handleError<any[]>(`Get student uri=${uri}`))
     );

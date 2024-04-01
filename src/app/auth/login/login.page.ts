@@ -12,7 +12,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import {
   BarcodeScanner,
 } from '@capacitor-mlkit/barcode-scanning';
-
+import { Platform } from '@ionic/angular';
 @Component({
   selector: 'app-login',
   templateUrl: 'login.page.html',
@@ -30,6 +30,7 @@ export class LoginPage implements OnInit {
     public auth: AuthService,
     public storage: StorageService,
     public router: Router,
+    public platform: Platform,
   ) {}
 
   async ngOnInit() {
@@ -66,8 +67,10 @@ export class LoginPage implements OnInit {
 
       await this.auth.setAuth(data);
 
-      const { available } = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
-      if (available == false) await BarcodeScanner.installGoogleBarcodeScannerModule(); // INSTALL GOOGLE BARCODE JIKA BELUM
+      if(this.platform.is('mobile')) {
+        const { available } = await BarcodeScanner.isGoogleBarcodeScannerModuleAvailable();
+        if (available == false) await BarcodeScanner.installGoogleBarcodeScannerModule(); // INSTALL GOOGLE BARCODE JIKA BELUM
+      }
 
       loading.dismiss();
       // this.goAnOtherPage('/pages/home');

@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
 import { StorageService } from 'src/app/services/storage.service';
 import { Geolocation } from '@capacitor/geolocation';
+import { HostListener } from '@angular/core';
+import { Platform } from '@ionic/angular';
+
 
 import {
   Barcode,
@@ -36,6 +39,18 @@ export class HomePage {
 
   public loaderGetPresence: Boolean = false;
   public loaderGetHistory: Boolean = false;
+  public location: any = {
+    permissions: {
+      location: 'prompt',
+      coarseLocation: 'prompt'
+    },
+    loading: false,
+    message: '',
+    formatted_address: '',
+    lat: 0,
+    lng: 0
+  }
+  public backButtonSubscription: any = null
 
   constructor(
     private loadingCtrl: LoadingController,
@@ -44,26 +59,86 @@ export class HomePage {
     public auth: AuthService,
     public router: Router,
     public storage: StorageService,
-    private toastController: ToastController
+    private toastController: ToastController,
+    public platform: Platform,
   ) {}
 
+  // @HostListener('document:ionBackButton', ['$event'])
+  // private async overrideHardwareBackAction($event:any) {
+  //   console.log('overrideHardwareBackAction:', $event);
+  //   $event.detail.register(100, async () => {
+  //     $event.stopImmediatePropagation();
+  //     $event.stopPropagation();
+  //     $event.preventDefault();
+  //   });
+  //   await void(0); // Do nothing
+  // }
+
   async ionViewDidEnter(){
+    this.backButtonSubscription = this.platform.backButton
+        .subscribeWithPriority(9999, ($event) => {
+              // Do my stuff on back button tap
+              console.log('$event', $event)
+        });
+
     this.getPresence();
     this.getPresenceHistory();
 
-    const l = await this.loadingCtrl.create({
-      cssClass: 'custom-loading',
-      message: 'Sedang memeriksa lokasi anda.',
-    });
-    l.present();
+    await this.handleLocation()
 
-    Geolocation.checkPermissions().then((location) => {
-      l.dismiss()
-      console.error('location')
-      console.error(`Location: ${location.location} | coarse: ${location.coarseLocation}`)
-      // alert(`Location: ${location.location} | coarse: ${location.coarseLocation}`)
-    })
+  }
 
+  ionViewWillLeave() {
+    this.backButtonSubscription.unsubscribe();
+  }
+
+  async handleLocation() {
+    // const l = await this.loadingCtrl.create({
+    //   cssClass: 'custom-loading',
+    //   message: 'Sedang memeriksa lokasi anda.',
+    // });
+    // l.present();
+    this.location.loading = true
+    this.location.message = ''
+
+    try {
+      let permissions = await Geolocation.checkPermissions()
+      if (!permissions || permissions.coarseLocation !== 'granted') {
+        console.log('geolocation: request permission')
+        permissions = await Geolocation.requestPermissions({permissions:['coarseLocation']})
+        if(permissions.coarseLocation != 'granted') {
+          this.location.loading = false
+          throw 'Aplikasi tidak memiliki akses lokasi.'
+        }
+      }
+
+      let location = await Geolocation.getCurrentPosition({ enableHighAccuracy: true })
+      this.location.lat = location.coords.latitude
+      this.location.lng = location.coords.longitude
+
+      await this.rest.get('https://maps.googleapis.com/maps/api/geocode/json', {
+        latlng: `${this.location.lat},${this.location.lng}`,
+        key: `AIzaSyArJkzKNSGOGAwtMcsCl6cRlFfAG_dIqmE`
+      }, {}).subscribe(async (data: any) => {
+        // console.log(data)
+        if (data && data.results && data.results.length) {
+          let address = data.results[0]
+          let fa = address.formatted_address
+          if (fa.split(',').length) this.location.formatted_address = fa.split(',')[0]
+        }
+
+        this.location.loading = false
+      });
+    } catch (error) {
+      console.log('handleLocation', error)
+      this.location.loading = false
+      this.location.message = error
+      this.location.formatted_address = ''
+      this.location.lat = 0
+      this.location.lng = 0
+      alert(error)
+      // l.dismiss()
+    }
   }
 
   // eslint-disable-next-line @angular-eslint/use-lifecycle-interface
@@ -82,6 +157,7 @@ export class HomePage {
   async handleRefresh(event: any = null) {
     await this.getPresence();
     await this.getPresenceHistory();
+    await this.handleLocation();
 
     if(event !== null) event?.target.complete()
   }
@@ -143,6 +219,14 @@ export class HomePage {
 
   public async doPresenceKelas(): Promise<void> {
 
+    if(
+      !this.location.lat ||
+      !this.location.lng
+    ) {
+      alert('Lokasi tidak ditemukan')
+      return
+    }
+
     const loading1 = await this.loadingCtrl.create({
       cssClass: 'custom-loading',
       showBackdrop: true,
@@ -150,41 +234,34 @@ export class HomePage {
     });
     loading1.present();
 
-    Geolocation.getCurrentPosition()
-    .then(async (position) => {
-      // return position;
-      const lat = position.coords.latitude
-      const lng = position.coords.longitude
+    // return position;
+    const lat = this.location.lat
+    const lng = this.location.lng
 
-      const { barcodes } = await BarcodeScanner.scan({
-        formats: [BarcodeFormat.QrCode],
-      });
-
-      this.rest.post(`presence-barcode/do-presence`, { qr_code: barcodes[0].rawValue, lat, lng }, {})
-      .subscribe(async (data: any) => {
-        console.log(data)
-        loading1.dismiss();
-
-        this.getPresenceHistory();
-
-        // SHOW TOAST SUCCESS
-        const toast = await this.toastController.create({
-          header: 'Presensi',
-          message: data.message,
-          duration: 2000,
-          position: 'top',
-          cssClass: 'custom-toast',
-          color: 'success',
-        });
-        toast.present();
-
-      });
-
-    }).catch((err) => {
-      loading1.dismiss();
-      alert(err.message);
-      console.error('coordinates err', err)
+    const { barcodes } = await BarcodeScanner.scan({
+      formats: [BarcodeFormat.QrCode],
     });
+
+    this.rest.post(`presence-barcode/do-presence`, { qr_code: barcodes[0].rawValue, lat, lng }, {})
+    .subscribe(async (data: any) => {
+      console.log(data)
+      loading1.dismiss();
+
+      this.getPresenceHistory();
+
+      // SHOW TOAST SUCCESS
+      const toast = await this.toastController.create({
+        header: 'Presensi',
+        message: data.message,
+        duration: 2000,
+        position: 'top',
+        cssClass: 'custom-toast',
+        color: 'success',
+      });
+      toast.present();
+
+    });
+
   }
 
   // Presensi Harian
@@ -237,6 +314,15 @@ export class HomePage {
 
   async takePresence(type: 'in' | 'out') {
     console.log('takePresence')
+
+    if(
+      !this.location.lat ||
+      !this.location.lng
+    ) {
+      alert('Lokasi tidak ditemukan')
+      return
+    }
+
     const loading = await this.loadingCtrl.create({
       cssClass: 'custom-loading',
       showBackdrop: true,
@@ -244,67 +330,57 @@ export class HomePage {
     });
     loading.present();
 
-    Geolocation.getCurrentPosition()
-    .then(async (position) => {
-      // return position;
-      const lat = position.coords.latitude
-      const lng = position.coords.longitude
-      loading.dismiss();
+    // return position;
+    const lat = this.location.lat
+    const lng = this.location.lng
+    loading.dismiss();
 
-      const capturedPhoto = await Camera.getPhoto({
-        resultType: CameraResultType.Base64,
-        source: CameraSource.Camera,
-        quality: 100,
-        width: 200,
-        height: 200,
-        direction: CameraDirection.Rear,
-        promptLabelHeader: 'Ambil Gambar'
-      });
-
-      const data = {
-        presence_daily_id: this.presence.id,
-        base64_selfie_img: capturedPhoto.base64String,
-        lat: lat,
-        lng: lng,
-      };
-
-
-      const loading1 = await this.loadingCtrl.create({
-        cssClass: 'custom-loading',
-        showBackdrop: true,
-        message: 'Memproses presensi anda...',
-      });
-      loading1.present();
-      console.log(JSON.stringify(data))
-      this.rest.post(`daily-presence/${type}`, data, {})
-      .subscribe(async (data: any) => {
-        loading1.dismiss();
-
-        // SHOW TOAST SUCCESS
-        const toast = await this.toastController.create({
-          header: 'Presensi',
-          message: data.message,
-          duration: 2000,
-          position: 'top',
-          cssClass: 'custom-toast',
-          color: 'success',
-        });
-        toast.present();
-
-        this.getPresence()
-        this.getPresenceHistory();
-
-        if(type === 'in') this.presenceIn = false;
-        if(type === 'out') this.presenceOut = false;
-      });
-    })
-    .catch((err) => {
-      loading.dismiss();
-      alert(err.message);
-      console.error('coordinates err', err)
+    const capturedPhoto = await Camera.getPhoto({
+      resultType: CameraResultType.Base64,
+      source: CameraSource.Camera,
+      quality: 100,
+      width: 200,
+      height: 200,
+      direction: CameraDirection.Rear,
+      promptLabelHeader: 'Ambil Gambar'
     });
 
+    const data = {
+      presence_daily_id: this.presence.id,
+      base64_selfie_img: capturedPhoto.base64String,
+      lat: lat,
+      lng: lng,
+    };
 
+
+    const loading1 = await this.loadingCtrl.create({
+      cssClass: 'custom-loading',
+      showBackdrop: true,
+      message: 'Memproses presensi anda...',
+    });
+    loading1.present();
+    console.log(JSON.stringify(data))
+    this.rest.post(`daily-presence/${type}`, data, {})
+    .subscribe(async (data: any) => {
+      loading1.dismiss();
+
+      // SHOW TOAST SUCCESS
+      const toast = await this.toastController.create({
+        header: 'Presensi',
+        message: data.message,
+        duration: 2000,
+        position: 'top',
+        cssClass: 'custom-toast',
+        color: 'success',
+      });
+      toast.present();
+
+      this.getPresence()
+      this.getPresenceHistory();
+
+      if(type === 'in') this.presenceIn = false;
+      if(type === 'out') this.presenceOut = false;
+    });
 
   }
 

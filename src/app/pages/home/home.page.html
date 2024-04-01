@@ -51,7 +51,7 @@
       <div class="card-body" style="min-height: 100%;">
 
         <!-- WARNING -->
-        <div class="card mt-2" style="border-radius: 12px; background-color: #FFF8DD;" *ngIf="this.user?.selfie_img === null || true">
+        <div class="card mt-2" style="border-radius: 12px; background-color: #FFF4DE; border: 1px dashed #FFA800" *ngIf="this.user?.selfie_img === null || true">
           <div class="card-body">
             <div class="d-flex flex-row align-items-start gap-10">
               <ion-icon name="alert-circle-outline"></ion-icon>
@@ -76,17 +76,46 @@
               </div>
             </div>
 
+            <!-- Location -->
+            <div class="d-flex gap-10 mb-3">
+              <div class="d-flex w-100 px-2 py-2 justify-content-between align-items-center" style="background-color:#FFF4DE; border: 1px dashed #FFA800; border-radius: 10px;">
+                <div class="spinner-border text-primary" *ngIf="location.loading" role="status" style="width: 20px;height: 20px;border: 1 solid currentcolor;">
+                  <span class="visually-hidden">Loading...</span>
+                </div>
+                <div class="d-flex align-items-center text-dark gap-10" *ngIf="!location.loading">
+                  <ion-icon name="location-outline"></ion-icon>
+                  <p class="text-sm mb-0" style="font-size: 11px;">{{ location?.message ? location?.message : location?.formatted_address }}</p>
+                </div>
+
+                <button class="btn btn-warning btn-sm" [disabled]="location.loading" (click)="handleLocation()">
+                  <ion-icon name="refresh-outline"></ion-icon>
+                </button>
+              </div>
+            </div>
+
             <!-- Button Absen -->
             <div class="d-flex gap-10 justify-content-center">
-              <div class="d-flex justify-content-center align-items-center">
-                <div class="spinner-border text-primary" *ngIf="loaderGetPresence" role="status" style="width: 20px;height: 20px;border: 1 solid currentcolor;">
+              <div class="d-flex justify-content-center align-items-center" *ngIf="location.loading">
+                <div class="spinner-border text-primary"  role="status" style="width: 20px;height: 20px;border: 1 solid currentcolor;">
                   <span class="visually-hidden">Loading...</span>
                 </div>
               </div>
-              <button id="open-loading" class="btn btn-primary btn-lg w-100 fs-10" style="font-size: 12px; height: 50px;" *ngIf="loaderGetPresence === false" (click)="takePresence('in')" [disabled]="presenceIn === false">
+              <button id="open-loading"
+                class="btn btn-primary btn-lg w-100 fs-10"
+                style="font-size: 12px; height: 50px;"
+                *ngIf="location.loading === false" (click)="takePresence('in')"
+                [disabled]="location.loading || !location.lat || !location.lng || presenceIn === false"
+              >
                 {{ presence?.hour_in ? rMoment(presence?.hour_in, 'H:mm').format('H:mm') + ' WIB' : 'Masuk' }}
               </button>
-              <button class="btn border btn-lg w-100 fs-10" [ngClass]="presence?.hour_out ? 'btn-primary' : 'btn-light'" style="font-size: 12px; height: 50px;"  *ngIf="loaderGetPresence === false" (click)="takePresence('out')" [disabled]="presenceOut === false">
+              <button
+                class="btn border btn-lg w-100 fs-10"
+                [ngClass]="presence?.hour_out ? 'btn-primary' : 'btn-light'"
+                style="font-size: 12px; height: 50px;"
+                *ngIf="location.loading === false"
+                (click)="takePresence('out')"
+                [disabled]="location.loading || !location.lat || !location.lng || presenceOut === false"
+              >
                 {{ presence?.hour_out ? rMoment(presence?.hour_out, 'H:mm').format('H:mm') + ' WIB' : 'Keluar' }}
               </button>
             </div>
@@ -95,8 +124,13 @@
             </div>
 
             <!-- Button Absen Kelas -->
-            <div class="d-flex gap-10 mt-3" *ngIf="loaderGetPresence === false">
-              <button class="btn btn-light border btn-lg w-100 fs-10 text-primary" style="font-size: 12px; height: 50px; border-radius: 30px;" [disabled]="presenceStatus === 'not-ready'" (click)="handlePresenceKelasButton()">
+            <div class="d-flex gap-10 mt-3" *ngIf="location.loading === false">
+              <button
+                class="btn btn-light border btn-lg w-100 fs-10 text-primary"
+                style="font-size: 12px; height: 50px; border-radius: 30px;"
+                [disabled]="location.loading || !location.lat || !location.lng || presenceStatus === 'not-ready'"
+                (click)="handlePresenceKelasButton()"
+              >
                 Absen Kelas
               </button>
             </div>
