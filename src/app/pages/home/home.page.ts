@@ -253,7 +253,7 @@ export class HomePage {
       const capturedPhoto = await Camera.getPhoto({
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
-        quality: 20,
+        quality: 50,
         width: 200,
         height: 200,
         direction: CameraDirection.Rear,
