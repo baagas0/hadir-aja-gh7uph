@@ -91,7 +91,7 @@ export class HomePage {
     const capturedPhoto = await Camera.getPhoto({
       resultType: CameraResultType.Base64,
       source: CameraSource.Camera,
-      quality: 50,
+      quality: 100,
       width: 200,
       height: 200,
       direction: CameraDirection.Rear,
@@ -236,6 +236,7 @@ export class HomePage {
   }
 
   async takePresence(type: 'in' | 'out') {
+    console.log('takePresence')
     const loading = await this.loadingCtrl.create({
       cssClass: 'custom-loading',
       showBackdrop: true,
@@ -253,7 +254,7 @@ export class HomePage {
       const capturedPhoto = await Camera.getPhoto({
         resultType: CameraResultType.Base64,
         source: CameraSource.Camera,
-        quality: 50,
+        quality: 100,
         width: 200,
         height: 200,
         direction: CameraDirection.Rear,
@@ -274,6 +275,7 @@ export class HomePage {
         message: 'Memproses presensi anda...',
       });
       loading1.present();
+      console.log(JSON.stringify(data))
       this.rest.post(`daily-presence/${type}`, data, {})
       .subscribe(async (data: any) => {
         loading1.dismiss();
